@@ -11,17 +11,17 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Bibliotheque {
-    private List<Livre> livres;
+    private List<Document> documents;
     private List<Adherent> adherents;
 
     public Bibliotheque(){
-        this.livres = new ArrayList<>();
+        this.documents = new ArrayList<>();
         this.adherents = new ArrayList<>();
     }
 
-    public void ajouterLivre(Livre livre){
-        if (!livres.contains(livre)){
-            this.livres.add(livre);
+    public void ajouterLivre(Document document){
+        if (!documents.contains(document)){
+            this.documents.add(document);
         }
     }
 
@@ -31,35 +31,31 @@ public class Bibliotheque {
         }
     }
 
-    public Optional<Livre> rechercherParIsbn(String isbn){
-        return this.livres.stream()
-                .filter(livre -> livre.getIsbn().equals(isbn))
+    public Optional<Document> rechercherParIsbn(String isbn){
+        return this.documents.stream()
+                .filter(document -> document.getIsbn().equals(isbn))
                 .findFirst();
     }
 
     public List<Livre> rechercherParAuteur(String nomAuteur) {
         // stream + filter + collect
-        List<Livre> auteurLivres = this.livres.stream()
+        return this.documents.stream()
+                .filter(document -> document instanceof Livre)
+                .map(document -> (Livre) document)
                 .filter(livre -> livre.getAuteur().getNom().equals(nomAuteur))
                 .toList();
-
-        return auteurLivres;
     }
 
-    public List<Livre> rechercherParCategorie(String categorie) {
-        List<Livre> categories = this.livres.stream()
-                .filter(livre -> livre.getCategorie().equals(categorie))
+    public List<Document> rechercherParCategorie(String categorie) {
+        return this.documents.stream()
+                .filter(document -> document.getCategorie().equals(categorie))
                 .toList();
-
-        return categories;
     }
 
-    public List<Livre> listerLivresDisponibles() {
-        List<Livre> livresDispo = this.livres.stream()
-                .filter(Livre::isDispo)
+    public List<Document> listerLivresDisponibles() {
+        return this.documents.stream()
+                .filter(Document::isDispo)
                 .toList();
-
-        return livresDispo;
     }
 
     public List<Emprunt> listerEmpruntsEnRetard(){
@@ -69,10 +65,10 @@ public class Bibliotheque {
                 .toList();
     }
 
-    public Optional<Livre> livreLePlusEmprunte(){
+    public Optional<Document> documentLePlusEmprunte(){
         return this.adherents.stream()
                 .flatMap(adherent -> adherent.getEmprunts().stream())
-                .collect(Collectors.groupingBy(Emprunt::getLivre, Collectors.counting()))
+                .collect(Collectors.groupingBy(Emprunt::getDocument, Collectors.counting()))
                 .entrySet().stream()
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey);

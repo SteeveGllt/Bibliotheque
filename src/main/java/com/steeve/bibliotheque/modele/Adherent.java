@@ -30,12 +30,22 @@ public class Adherent {
         this.emprunts = emprunts;
     }
 
-    public void emprunter(Livre livre) throws LivreIndisponibleException {
-        if(!livre.isDispo()){
+    public void emprunter(Document document) throws LivreIndisponibleException {
+        if(!document.isDispo()){
             throw new LivreIndisponibleException("Le livre n'est pas disponible");
         }
-        Emprunt emprunt = new Emprunt(livre, this, LocalDate.now().plusDays(10));
+        Emprunt emprunt = new Emprunt(document, this, LocalDate.now().plusDays(10));
         this.emprunts.add(emprunt);
-        livre.setDispo(false);
+        document.setDispo(false);
+    }
+
+    public void retourner(Document document){
+        Emprunt emprunt = this.emprunts.stream()
+                .filter(e -> e.getDocument().equals(document) && e.estEnCours())
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Aucun emprunt en cours pour ce livre"));
+
+        emprunt.setDateRetourReelle(LocalDate.now());
+        document.setDispo(true);
     }
 }

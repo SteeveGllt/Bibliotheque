@@ -3,24 +3,25 @@ package com.steeve.bibliotheque.modele;
 import java.time.LocalDate;
 
 public class Emprunt {
-    private Livre livre;
+    private Document document;
     private Adherent adherent;
     private LocalDate dateEmprunt;
     private LocalDate dateRetourPrevu;
+    private LocalDate dateRetourReelle;
 
-    public Emprunt(Livre livre, Adherent adherent, LocalDate dateRetourPrevu){
-        this.livre = livre;
+    public Emprunt(Document document, Adherent adherent, LocalDate dateRetourPrevu){
+        this.document = document;
         this.adherent = adherent;
         this.dateEmprunt = LocalDate.now();
         this.dateRetourPrevu = dateRetourPrevu;
     }
 
-    public Livre getLivre() {
-        return livre;
+    public Document getDocument() {
+        return document;
     }
 
-    public void setLivre(Livre livre) {
-        this.livre = livre;
+    public void setDocument(Document document) {
+        this.document = document;
     }
 
     public Adherent getAdherent() {
@@ -45,5 +46,17 @@ public class Emprunt {
 
     public void setDateRetourPrevu(LocalDate dateRetourPrevu) {
         this.dateRetourPrevu = dateRetourPrevu;
+    }
+
+    public LocalDate getDateRetourReelle(){
+        return this.dateRetourReelle;
+    }
+
+    public void setDateRetourReelle(LocalDate dateRetourReelle) {
+        this.dateRetourReelle = dateRetourReelle;
+    }
+
+    public boolean estEnCours(){
+        return dateRetourReelle == null;
     }
 }

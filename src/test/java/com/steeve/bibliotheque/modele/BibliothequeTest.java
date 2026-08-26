@@ -14,40 +14,40 @@ class BibliothequeTest {
     void rechercherParIsbn_devraitRetournerLeLivre() {
         Bibliotheque bibliotheque = new Bibliotheque();
         Auteur auteur = new Auteur("Hugo", "Victor", "Francaise");
-        Livre livre = new Livre("Les Misérables", auteur, "ISBN001", "Roman");
-        bibliotheque.ajouterLivre(livre);
+        Document document = new Livre("Les Misérables", auteur, "ISBN001", "Roman");
+        bibliotheque.ajouterLivre(document);
 
-        Optional<Livre> resultat = bibliotheque.rechercherParIsbn("ISBN001");
+        Optional<Document> resultat = bibliotheque.rechercherParIsbn("ISBN001");
 
         assertTrue(resultat.isPresent());
-        assertEquals(livre, resultat.get());
+        assertEquals(document, resultat.get());
     }
 
     @Test
     void rechercherParAuteur_devraitRetournerLeLivre() {
         Bibliotheque bibliotheque = new Bibliotheque();
         Auteur auteur = new Auteur("Hugo", "Victor", "Francaise");
-        Livre livre = new Livre("Les Misérables", auteur, "ISBN001", "Roman");
-        bibliotheque.ajouterLivre(livre);
+        Document document = new Livre("Les Misérables", auteur, "ISBN001", "Roman");
+        bibliotheque.ajouterLivre(document);
 
         List<Livre> resultat = bibliotheque.rechercherParAuteur("Hugo");
 
         assertFalse(resultat.isEmpty());
-        assertEquals(livre, resultat.getFirst());
+        assertEquals(document, resultat.getFirst());
     }
 
     @Test
     void listerLivresDispo_devraitRetournerLeLivre() throws LivreIndisponibleException {
         Bibliotheque bibliotheque = new Bibliotheque();
         Auteur auteur = new Auteur("Hugo", "Victor", "Francaise");
-        Livre livre = new Livre("Les Misérables", auteur, "ISBN001", "Roman");
-        Livre livre2 = new Livre("test", auteur, "ISBN002", "Roman");
+        Document document = new Livre("Les Misérables", auteur, "ISBN001", "Roman");
+        Document document1 = new Livre("test", auteur, "ISBN002", "Roman");
         Adherent adherent = new Adherent("Ronaldo");
-        bibliotheque.ajouterLivre(livre);
-        bibliotheque.ajouterLivre(livre2);
+        bibliotheque.ajouterLivre(document);
+        bibliotheque.ajouterLivre(document1);
 
-        adherent.emprunter(livre);
-        List<Livre> resultat = bibliotheque.listerLivresDisponibles();
+        adherent.emprunter(document);
+        List<Document> resultat = bibliotheque.listerLivresDisponibles();
 
         assertFalse(resultat.isEmpty());
     }
@@ -57,9 +57,9 @@ class BibliothequeTest {
         Bibliotheque bibliotheque = new Bibliotheque();
         Adherent adherent = new Adherent("Jean");
         Auteur auteur = new Auteur("Hugo", "Victor", "Française");
-        Livre livre = new Livre("Les Misérables", auteur, "ISBN001", "Roman");
+        Document document = new Livre("Les Misérables", auteur, "ISBN001", "Roman");
 
-        adherent.emprunter(livre);
+        adherent.emprunter(document);
         bibliotheque.inscrireAdherent(adherent);
 
         Emprunt emprunt = adherent.getEmprunts().get(0);
@@ -80,23 +80,23 @@ class BibliothequeTest {
 
         Auteur auteur = new Auteur("Hugo", "Victor", "Française");
 
-        Livre livre1 = new Livre("Les Misérables", auteur, "ISBN001", "Roman");
-        Livre livre2 = new Livre("Notre-Dame de Paris", auteur, "ISBN002", "Roman");
+        Document document = new Livre("Les Misérables", auteur, "ISBN001", "Roman");
+        Document document1 = new Livre("Notre-Dame de Paris", auteur, "ISBN002", "Roman");
 
         bibliotheque.inscrireAdherent(adherent1);
         bibliotheque.inscrireAdherent(adherent2);
 
-        adherent1.emprunter(livre1);
-        livre1.setDispo(true);
+        adherent1.emprunter(document);
+        adherent1.retourner(document);
 
-        adherent2.emprunter(livre1);
+        adherent2.emprunter(document);
 
-        adherent1.emprunter(livre2);
+        adherent1.emprunter(document1);
 
-        Optional<Livre> resultat = bibliotheque.livreLePlusEmprunte();
+        Optional<Document> resultat = bibliotheque.documentLePlusEmprunte();
 
         assertTrue(resultat.isPresent());
-        assertEquals(livre1, resultat.get());
+        assertEquals(document, resultat.get());
     }
 
     @Test
@@ -109,31 +109,31 @@ class BibliothequeTest {
 
         Auteur auteur = new Auteur("Hugo", "Victor", "Française");
 
-        Livre livre1 = new Livre("Les Misérables", auteur, "ISBN001", "Roman");
-        Livre livre2 = new Livre("Notre-Dame de Paris", auteur, "ISBN002", "Roman");
-        Livre livre3 = new Livre("Le Dernier Jour", auteur, "ISBN003", "Roman");
+        Document document = new Livre("Les Misérables", auteur, "ISBN001", "Roman");
+        Document document1 = new Livre("Notre-Dame de Paris", auteur, "ISBN002", "Roman");
+        Document document2 = new Livre("Le Dernier Jour", auteur, "ISBN003", "Roman");
 
         bibliotheque.inscrireAdherent(adherent1);
         bibliotheque.inscrireAdherent(adherent2);
         bibliotheque.inscrireAdherent(adherent3);
 
         // Jean : 3 emprunts
-        adherent1.emprunter(livre1);
-        livre1.setDispo(true);
+        adherent1.emprunter(document);
+        document.setDispo(true);
 
-        adherent1.emprunter(livre1);
-        livre1.setDispo(true);
+        adherent1.emprunter(document);
+        document.setDispo(true);
 
-        adherent1.emprunter(livre1);
+        adherent1.emprunter(document);
 
         // Paul : 2 emprunts
-        adherent2.emprunter(livre2);
-        livre2.setDispo(true);
+        adherent2.emprunter(document1);
+        document1.setDispo(true);
 
-        adherent2.emprunter(livre2);
+        adherent2.emprunter(document1);
 
         // Pierre : 1 emprunt
-        adherent3.emprunter(livre3);
+        adherent3.emprunter(document2);
 
         List<Adherent> resultat = bibliotheque.topAdherentsActifs(2);
 

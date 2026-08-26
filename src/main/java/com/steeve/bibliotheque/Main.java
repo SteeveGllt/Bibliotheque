@@ -1,9 +1,6 @@
 package com.steeve.bibliotheque;
 
-import com.steeve.bibliotheque.modele.Adherent;
-import com.steeve.bibliotheque.modele.Auteur;
-import com.steeve.bibliotheque.modele.Bibliotheque;
-import com.steeve.bibliotheque.modele.Livre;
+import com.steeve.bibliotheque.modele.*;
 
 import java.util.Optional;
 
@@ -16,16 +13,16 @@ public class Main {
         Auteur auteur = new Auteur("Test", "test", "france");
         Auteur auteur2 = new Auteur("Test", "test", "Allemand");
 
-        Livre livre = new Livre("Oui", auteur, "ISB001", "Roman");
+        Document document = new Livre("Oui", auteur, "ISB001", "Roman");
 
-        bibliotheque.ajouterLivre(livre);
+        bibliotheque.ajouterLivre(document);
 
         System.out.println("\n--- Test listerLivresDisponibles (avant emprunt) ---");
         System.out.println("Disponibles : " + bibliotheque.listerLivresDisponibles().size() + " (attendu: 4)");
         // Test livres disponibles après emprunt
         Adherent alice = new Adherent("Alice");
         try {
-            alice.emprunter(livre);
+            alice.emprunter(document);
         } catch (Exception e) {
             System.out.println("Erreur emprunt : " + e.getMessage());
         }
