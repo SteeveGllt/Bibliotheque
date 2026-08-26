@@ -5,15 +5,22 @@ import java.util.List;
 import java.util.Objects;
 
 public class Auteur {
+    private int id;
     private String nom, prenom, nationalite;
     private ArrayList<Livre> livres;
 
     public Auteur(String nom, String prenom, String nationalite){
+        this(0, nom, prenom, nationalite);
+    }
+    public Auteur(int id, String nom, String prenom, String nationalite){
+        this.id = id;
         this.nom = nom;
         this.prenom = prenom;
         this.nationalite = nationalite;
         this.livres = new ArrayList<Livre>();
     }
+
+    public int getId() { return id; }
 
     public String getNom() {
         return nom;
